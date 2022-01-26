@@ -11,3 +11,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+input {
+  width: 33%;
+}
+
+.mselect {
+  width: 33%;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
