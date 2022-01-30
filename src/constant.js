@@ -1,43 +1,43 @@
 const cities = [
     {
         label: "Paris",
-        value: 500
+        value: 10
     },
     {
         label: "London",
-        value: 450
+        value: 9
     },
     {
         label: "Barcelona",
-        value: 400
+        value: 8
     },
     {
         label: "Madrid",
-        value: 350
+        value: 7
     },
     {
         label: "Rome",
-        value: 300
+        value: 6
     },
     {
         label: "Amsterdam",
-        value: 250
+        value: 5
     },
     {
         label: "Prague",
-        value: 200
+        value: 4
     },
     {
         label: "Brussels",
-        value: 150
+        value: 3
     },
     {
         label: "Budapest",
-        value: 100
+        value: 2
     },
     {
         label: "Istanbul",
-        value: 50
+        value: 1
     }
 ]
 

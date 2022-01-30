@@ -6,9 +6,9 @@ import './constant';
 import cities from "./constant";
 import { MultiSelect } from "react-multi-select-component";
 import axios from "axios";
-import {Card, Image} from "react-bootstrap";
+import {Card, Image, Row} from "react-bootstrap";
 import 'react-notifications/lib/notifications.css';
-import {NotificationManager} from "react-notifications";
+import City from "./City";
 
 
 function App() {
@@ -17,6 +17,8 @@ function App() {
   const [selected, setSelected] = useState([]);
   const [result, setResult] = useState([]);
   const [error, setError] = useState(false);
+  const [showResult, setShowResult] = useState(false);
+  const results = [];
 
   const onChangeInput= (e) => {
       setBudget(e.target.value);
@@ -31,65 +33,72 @@ function App() {
             setError(true);
         }
         else {
+            setShowResult(true);
             setError(false);
-            selected.map(cityName => {
-                event.preventDefault();
-                const url = "https://api.pexels.com/v1/search?query=" + cityName.label + "&per_page=" + 1;
-                const access_token = '563492ad6f917000010000016243b7b390a84f58bd3d3155e2cd694a';
+            selected.map((city => {
+                const url = "https://api.pexels.com/v1/search?query=" + city.label + "city" + "&per_page=" + 3;
+                const access_token = '563492ad6f917000010000018f4ff1cec5904456af67900f4f9c6620';
                 axios.get(url, {
                     headers: {
                         'Authorization': `${access_token}`
                     }
                 }).then(data => {
-                    console.log(data);
                     setResult(data.data.photos);
-                    console.log(result);
                 });
-            });
+            }))
         }
-
-        console.log(result);
     }
+
 
   return (
        <div>
-         <h1>TRIP PLANNER</h1>
-           <form>
-               <label>
-                   <input type="number" placeholder={"Please Enter Your Trip Budget ($)"} onChange={onChangeInput}  />
-               </label>
-           </form>
-           <br/>
-           <div className={"mselect"}>
-           <MultiSelect
-               options={cities}
-               value={selected}
-               onChange={setSelected}
-               labelledBy="Select"
-           />
-               {
-                   error ?
-                   <div>
-                       <h1>PLEASE SELECT MORE THAN 2 CITIES</h1>
-                   </div> : ''
-               }
+           <div class="container col-6">
+               <article>
+                 <h1 className={"col-6"}>TRIP PLANNER</h1>
+               </article>
+                   <form className={"field col-6"}>
+                       <label>
+                           <input type="number" placeholder={"Please Enter Your Trip Budget ($)"} onChange={onChangeInput}  />
+                       </label>
+                   </form>
+                   <br/>
+               <div className="mselect">
+                       <MultiSelect
+                           options={cities}
+                           value={selected}
+                           onChange={setSelected}
+                           labelledBy="Select"
+                       />
+               </div>
+               <br/>
+               <button className={"button-36"} onClick={handleSubmit}>Submit</button>
            </div>
-           <button onClick={handleSubmit}>Submit</button>
            <br/>
            <div className="container">
-                   {result.map(search => (
+               {showResult &&
+                   <div className="city-list">
+                       {results.map(photos => {
+                           photos.map(photo => {
+                               <City title={photo.alt} img_url={photo.url}></City>
+                                })
+                            })
+                       }
+                   </div>
+               }
+               <Row>
+               {result.map((search,index) => (
                        <div className="row">
-                           <div className="col-sm-4">
-                               <div style={{'margin-top': '10px'}}>
-                                   <Image variant="top" src={search.src.landscape} alt={search.photographer}/>
-                                   <div>
-                                       <h5 className="card-title">Card title</h5>
-                                       <a className="btn btn-primary">Know more</a>
-                                   </div>
+                           <div className="card col-sm-4" style={{'margin-top': '10px'}}>
+                               <img src={search.src.medium} alt={search.photographer}/>
+                               <div class={"container"}>
+                                   <h5 className="card-title">{search.alt}</h5>
+                                   <a className="btn btn-primary">{search.photographer}</a>
                                </div>
                            </div>
                        </div>
                    ))}
+               </Row>
+
            </div>
        </div>
   );
